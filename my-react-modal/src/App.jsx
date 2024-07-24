@@ -3,7 +3,9 @@ import "./App.css";
 import Modal from "./component/Modal";
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
+  let isOpen, setIsOpen;
+  [isOpen, setIsOpen] = useState("false");
 
   return (
     <>
