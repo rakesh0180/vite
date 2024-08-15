@@ -1,0 +1,102 @@
+/* html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid red;
+}
+
+.header {
+  flex-shrink: 0;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.main {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  background-color: #fafafa;
+}
+
+.footer {
+  flex-shrink: 0;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-top: 1px solid #ccc;
+} */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ensure the container takes full viewport height */
+  border: 1px solid red;
+}
+
+.header,
+.footer {
+  flex-shrink: 0;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.footer {
+  border-top: 1px solid #ccc;
+}
+
+.main {
+  flex-grow: 1;
+  overflow-y: auto; /* Allows scrolling in the main section */
+  background-color: #fafafa;
+  padding: 1rem;
+}
+
+.todo-container {
+  display: flex;
+  gap: 1vw;
+  flex-direction: column;
+}
+
+.add-section {
+  display: flex;
+  gap: 3vw;
+  .input-container {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+.operation-section {
+  display: flex;
+  gap: 1vw;
+  flex-direction: column;
+
+  .name-row {
+    display: flex;
+    gap: 3vw;
+    .name {
+      flex-basis: 50%;
+    }
+  }
+}
+.error {
+  color: red;
+  font-size: 0.8em;
+}
