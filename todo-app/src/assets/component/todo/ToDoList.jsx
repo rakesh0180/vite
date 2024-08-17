@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 const ToDoList = ({ data }) => {
   const [add, setAdd] = useState("");
@@ -6,6 +6,12 @@ const ToDoList = ({ data }) => {
   const [editId, setEditId] = useState(null);
   const [editText, setEditText] = useState("");
   const [error, setError] = useState({});
+
+  useEffect(() => {
+    if (editId) {
+      setAdd("");
+    }
+  }, [editId]);
 
   const id = useId();
 
@@ -64,6 +70,7 @@ const ToDoList = ({ data }) => {
             onChange={(e) => {
               handleInputChange(e);
             }}
+            disabled={editId}
           />
           {error.add && (
             <label htmlFor="add" className="error">
