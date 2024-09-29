@@ -1,0 +1,15 @@
+.pagination-button {
+  cursor: pointer;
+}
+
+.pagination-button:disabled {
+  cursor: default; /* This will make the cursor appear as 'default' (non-clickable) */
+  opacity: 0.5; /* Optional: make the button visually look disabled */
+}
+
+.loader {
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+  margin-top: 20px;
+}
