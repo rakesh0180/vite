@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// import "./Pagination.css"; // Optional: You can define CSS for styling (scroll, pagination layout, etc.)
 
 const Pagination = ({
   apiThunk, // Thunk function to fetch data
@@ -82,57 +83,72 @@ const Pagination = ({
   const endPage = Math.min(startPage + numberOfButtons - 1, totalPages);
 
   return (
-    <div>
-      <div>
-        <button
-          onClick={handlePrevious}
-          disabled={currentPage === 1 || isLoading} // Disable if on first page or loading
-          className="pagination-button"
-        >
-          Previous
-        </button>
-        {Array.from(
-          { length: endPage - startPage + 1 },
-          (_, i) => startPage + i
-        ).map((page) => (
+    <div className="pagination-container">
+      {/* Content section with scroll */}
+      <div
+        className="pagination-content"
+        style={{ height: "300px", overflowY: "scroll" }}
+      >
+        {
+          isLoading ? (
+            <div className="loader">Loading...</div>
+          ) : totalItems === 0 ? (
+            <p>No items available</p>
+          ) : (
+            renderItems(data)
+          ) /* Render items */
+        }
+      </div>
+
+      {/* Pagination controls at the bottom */}
+      <div className="pagination-controls">
+        <div className="pagination-buttons">
           <button
-            key={page}
-            onClick={() => handleChangePage(page)}
-            disabled={page === currentPage || isLoading} // Disable if current page or loading
+            onClick={handlePrevious}
+            disabled={currentPage === 1 || isLoading} // Disable if on first page or loading
             className="pagination-button"
           >
-            {page}
+            Previous
           </button>
-        ))}
-        <button
-          onClick={handleNext}
-          disabled={currentPage === totalPages || isLoading} // Disable if on last page or loading
-          className="pagination-button"
-        >
-          Next
-        </button>
-      </div>
-      <select
-        value={itemsPerPage}
-        onChange={handleItemsPerPageChange}
-        disabled={isLoading}
-      >
-        {itemsPerPageOptions.map((size) => (
-          <option key={size} value={size}>
-            {size}
-          </option>
-        ))}
-      </select>
-
-      {/* Show loader while data is being fetched */}
-      {isLoading ? (
-        <div className="loader">Loading...</div>
-      ) : (
-        <div>
-          {totalItems === 0 ? <p>No items available</p> : renderItems(data)}{" "}
-          {/* Render message if no data */}
+          {Array.from(
+            { length: endPage - startPage + 1 },
+            (_, i) => startPage + i
+          ).map((page) => (
+            <button
+              key={page}
+              onClick={() => handleChangePage(page)}
+              disabled={page === currentPage || isLoading} // Disable if current page or loading
+              className="pagination-button"
+            >
+              {page}
+            </button>
+          ))}
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages || isLoading} // Disable if on last page or loading
+            className="pagination-button"
+          >
+            Next
+          </button>
         </div>
-      )}
+
+        {/* Dropdown for items per page inside pagination controls */}
+        <div className="pagination-items-per-page">
+          <label htmlFor="itemsPerPageSelect">Items per page: </label>
+          <select
+            id="itemsPerPageSelect"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            disabled={isLoading}
+          >
+            {itemsPerPageOptions.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 };
