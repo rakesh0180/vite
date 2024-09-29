@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-// Dummy data for testing
-const dummyData = Array.from({ length: 1000 }, (_, i) => ({
-  id: i + 1,
-  name: `Item ${i + 1}`,
-}));
-
 const Pagination = ({
-  itemsPerPageOptions = [50, 100, 150, 200],
-  defaultPageSize = 50,
-  numberOfButtons = 5, // Number of buttons to show in pagination (new prop)
+  apiThunk, // Thunk function to fetch data
+  itemsPerPageOptions = [25, 50, 100, 150, 200],
+  defaultPageSize = 25,
+  numberOfButtons = 5, // Number of buttons to show in pagination
   renderItems, // Function to render the items
   onPageChange, // Callback for when page changes
   onItemsPerPageChange, // Callback for when items per page changes
-  extractData = (response) => ({ data: response.data, total: response.total }), // Function to extract data and total items from API response
 }) => {
   const [currentStart, setCurrentStart] = useState(0); // Start index of the current items
   const [itemsPerPage, setItemsPerPage] = useState(defaultPageSize);
@@ -26,29 +20,23 @@ const Pagination = ({
     fetchData(currentStart, itemsPerPage);
   }, [currentStart, itemsPerPage]);
 
+  // Function to fetch data using the passed thunk
   const fetchData = async (start, limit) => {
     setIsLoading(true); // Set loading to true when fetching starts
-    // Simulate an API request with dummy data
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const paginatedData = dummyData.slice(start, start + limit); // Slice the data based on start and limit
-        const result = {
-          data: paginatedData,
-          total: dummyData.length, // Total items in the dummy data
-        };
-        const { data, total } = extractData(result);
-        setData(data);
-        setTotalItems(total);
-        setIsLoading(false); // Set loading to false after fetching completes
+    try {
+      const result = await apiThunk(start, limit); // Call the apiThunk with start and limit
+      setData(result.data);
+      setTotalItems(result.total);
+      setIsLoading(false); // Set loading to false after fetching completes
 
-        // Optionally trigger onPageChange callback
-        if (onPageChange) {
-          onPageChange(start);
-        }
-
-        resolve(result);
-      }, 1000); // Simulate network delay (1 second)
-    });
+      // Optionally trigger onPageChange callback
+      if (onPageChange) {
+        onPageChange(start);
+      }
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      setIsLoading(false);
+    }
   };
 
   // If totalItems is 0, show at least 1 page
