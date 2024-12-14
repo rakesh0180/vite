@@ -1,3 +1,8 @@
+#root {
+  height: 100dvh;
+  width: 100dvw;
+}
+
 .pagination-button {
   cursor: pointer;
 }
@@ -18,7 +23,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 80%;
 }
 
 .pagination-content {
