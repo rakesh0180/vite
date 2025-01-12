@@ -11,7 +11,6 @@ const fetchPostsThunk = (start, limit) => {
       return response.json().then((data) => ({ data, total }));
     })
     .catch((error) => {
-      console.error("Failed to fetch data:", error);
       return { data: [], total: 0 }; // Return empty data and total on error
     });
 };
