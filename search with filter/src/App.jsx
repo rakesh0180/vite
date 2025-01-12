@@ -5,58 +5,59 @@ function App() {
   const [search, setSearch] = useState("");
   const [options, setOptions] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
+  console.log("🚀 ~ App ~ selectedOptions:", selectedOptions);
+
   const data = [
     { name: "Rakesh", value: "Rakesh" },
     { name: "Mahesh", value: "Mahesh" },
-    { name: "srujan", value: "srujan" },
-    { name: "danel", value: "danel" },
+    { name: "Srujan", value: "Srujan" },
+    { name: "Danel", value: "Danel" },
   ];
 
   const handleChange = (e) => {
     const value = e.target.value;
     setSearch(value);
-    const filteredOptions = data.filter((option) =>
-      option.name.toLowerCase().includes(value.toLowerCase())
-    );
-    setOptions(filteredOptions);
+
+    if (value === "") {
+      // If search is empty, reset to all options
+      setOptions(data);
+    } else {
+      // Filter options based on search
+      const filteredOptions = data.filter((option) =>
+        option.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setOptions(filteredOptions);
+    }
   };
 
   const handleCheckboxChange = (e, option) => {
     const { checked } = e.target;
 
     if (checked) {
-      if (selectedOptions.includes(option)) {
-        // If the selected option is already selected, remove it
-        setSelectedOptions((prevOptions) =>
-          prevOptions.filter(
-            (selectedOption) => selectedOption.name !== option.name
-          )
-        );
-      } else {
-        // If the selected option is not selected, add it
+      // Add to selected options if not already selected
+      if (!selectedOptions.some((selected) => selected.name === option.name)) {
         setSelectedOptions((prevOptions) => [...prevOptions, option]);
       }
     } else {
-      // If the checkbox is unchecked, remove the selected option
+      // Remove from selected options
       setSelectedOptions((prevOptions) =>
-        prevOptions.filter(
-          (selectedOption) => selectedOption.name !== option.name
-        )
+        prevOptions.filter((selected) => selected.name !== option.name)
       );
     }
   };
 
   const sortOptions = (options, selectedOptions) => {
-    const sortedOptions = options.sort((a, b) => {
-      if (selectedOptions.includes(a)) {
-        return -1;
-      } else if (selectedOptions.includes(b)) {
-        return 1;
-      } else {
-        return 0;
-      }
+    return [...options].sort((a, b) => {
+      const aSelected = selectedOptions.some(
+        (selected) => selected.name === a.name
+      );
+      const bSelected = selectedOptions.some(
+        (selected) => selected.name === b.name
+      );
+      if (aSelected && !bSelected) return -1;
+      if (!aSelected && bSelected) return 1;
+      return 0;
     });
-    return sortedOptions;
   };
 
   return (
@@ -70,22 +71,24 @@ function App() {
           onChange={handleChange}
           placeholder="Search..."
         />
-        {options.length > 0 && (
+        {(options.length > 0 || search === "") && (
           <ul>
-            {sortOptions(options, selectedOptions).map((option) => (
-              <li key={option.value}>
-                <input
-                  type={selectedOptions.includes(option) ? "checkbox" : "radio"}
-                  id={option.value}
-                  name={option.name}
-                  onChange={(e) => {
-                    handleCheckboxChange(e, option);
-                  }}
-                  checked={selectedOptions.includes(option)}
-                />
-                <label htmlFor={option.value}>{option.name}</label>
-              </li>
-            ))}
+            {sortOptions(search === "" ? data : options, selectedOptions).map(
+              (option) => (
+                <li key={option.value}>
+                  <input
+                    type="checkbox"
+                    id={option.value}
+                    name={option.name}
+                    onChange={(e) => handleCheckboxChange(e, option)}
+                    checked={selectedOptions.some(
+                      (selected) => selected.name === option.name
+                    )}
+                  />
+                  <label htmlFor={option.value}>{option.name}</label>
+                </li>
+              )
+            )}
           </ul>
         )}
       </section>
