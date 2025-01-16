@@ -178,8 +178,6 @@ function App() {
   ]);
 
   const handleSearchChange = (search, id) => {
-    console.log("🚀 ~ handleSearchChange ~ search, id:", search, id);
-    alert(1);
     setFields((prevFields) =>
       prevFields.map((field) =>
         field.id === id ? { ...field, search } : field
